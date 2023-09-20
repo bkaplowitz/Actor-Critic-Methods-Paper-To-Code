@@ -5,7 +5,7 @@ class Agent():
                  eps_dec):
         self.lr = lr
         self.gamma = gamma
-        self.actions = [i for i in range(n_actions)]
+        self.actions = list(range(n_actions))
         self.states = state_space
         self.epsilon = eps_start
         self.eps_min = eps_end
@@ -22,17 +22,14 @@ class Agent():
 
     def max_action(self, state):
         actions = np.array([self.Q[(state, a)] for a in self.actions])
-        action = np.argmax(actions)
-
-        return action
+        return np.argmax(actions)
 
     def choose_action(self, state):
-        if np.random.random() < self.epsilon:
-            action = np.random.choice(self.actions)
-        else:
-            action = self.max_action(state)
-
-        return action
+        return (
+            np.random.choice(self.actions)
+            if np.random.random() < self.epsilon
+            else self.max_action(state)
+        )
 
     def decrement_epsilon(self):
         self.epsilon = self.epsilon - self.eps_dec \

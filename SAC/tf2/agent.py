@@ -16,7 +16,7 @@ class Agent:
         self.memory = ReplayBuffer(max_size, input_dims, n_actions)
         self.batch_size = batch_size
         self.n_actions = n_actions
-        self.fname = chkpt_dir + 'SAC/'
+        self.fname = f'{chkpt_dir}SAC/'
         self.actor = ActorNetwork(n_actions=n_actions,
                                   max_action=env.action_space.high)
         self.critic_1 = CriticNetwork()
@@ -39,19 +39,19 @@ class Agent:
         # graph, and TF2 will throw an error
         if self.memory.mem_cntr > self.batch_size:
             print('... saving models ...')
-            self.actor.save(self.fname+'actor')
-            self.critic_1.save(self.fname+'critic_1')
-            self.critic_2.save(self.fname+'critic_2')
-            self.value.save(self.fname+'value')
-            self.target_value.save(self.fname+'target_value')
+            self.actor.save(f'{self.fname}actor')
+            self.critic_1.save(f'{self.fname}critic_1')
+            self.critic_2.save(f'{self.fname}critic_2')
+            self.value.save(f'{self.fname}value')
+            self.target_value.save(f'{self.fname}target_value')
 
     def load_models(self):
         print('... loading models ...')
-        self.actor = keras.models.load_model(self.fname+'actor')
-        self.critic_1 = keras.models.load_model(self.fname+'critic_1')
-        self.critic_2 = keras.models.load_model(self.fname+'critic_2')
-        self.value = keras.models.load_model(self.fname+'value')
-        self.target_value = keras.models.load_model(self.fname+'target_value')
+        self.actor = keras.models.load_model(f'{self.fname}actor')
+        self.critic_1 = keras.models.load_model(f'{self.fname}critic_1')
+        self.critic_2 = keras.models.load_model(f'{self.fname}critic_2')
+        self.value = keras.models.load_model(f'{self.fname}value')
+        self.target_value = keras.models.load_model(f'{self.fname}target_value')
 
     def sample_normal(self, state):
         mu, sigma = self.actor(state)
@@ -78,11 +78,11 @@ class Agent:
         if tau is None:
             tau = self.tau
 
-        weights = []
         targets = self.target_value.weights
-        for i, weight in enumerate(self.value.weights):
-            weights.append(weight * tau + targets[i]*(1-tau))
-
+        weights = [
+            weight * tau + targets[i] * (1 - tau)
+            for i, weight in enumerate(self.value.weights)
+        ]
         self.target_value.set_weights(weights)
 
     def learn(self):

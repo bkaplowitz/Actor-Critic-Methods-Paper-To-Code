@@ -12,7 +12,7 @@ class Agent:
         self.gamma = gamma
         self.n_actions = n_actions
         self.action = None
-        self.action_space = [i for i in range(self.n_actions)]
+        self.action_space = list(range(self.n_actions))
         self.checkpoint_file = os.path.join(chkpt_dir, '_actor_critic')
 
         self.actor_critic = ActorCriticNetwork(n_actions=n_actions)

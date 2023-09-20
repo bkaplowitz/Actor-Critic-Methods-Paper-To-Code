@@ -58,10 +58,8 @@ class PolicyGradientAgent():
                 discount *= self.gamma
             G[t] = G_sum
         G = T.tensor(G, dtype=T.float).to(self.policy.device)
-        
-        loss = 0
-        for g, logprob in zip(G, self.action_memory):
-            loss += -g * logprob
+
+        loss = sum(-g * logprob for g, logprob in zip(G, self.action_memory))
         loss.backward()
         self.policy.optimizer.step()
 

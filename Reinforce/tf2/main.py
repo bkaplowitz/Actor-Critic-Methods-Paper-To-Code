@@ -44,5 +44,5 @@ if __name__ == '__main__':
               format(i, score, avg_score))
 
     filename = 'plots/lunar-lander.png'
-    x = [i for i in range(num_episodes)]
+    x = list(range(num_episodes))
     plot_learning_curve(x, score_history, filename)

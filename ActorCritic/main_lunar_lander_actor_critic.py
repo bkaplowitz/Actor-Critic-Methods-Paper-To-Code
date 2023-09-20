@@ -12,7 +12,7 @@ if __name__ == '__main__':
     fname = 'ACTOR_CRITIC_' + 'lunar_lander_' + str(agent.fc1_dims) + \
             '_fc1_dims_' + str(agent.fc2_dims) + '_fc2_dims_lr' + str(agent.lr) +\
             '_' + str(n_games) + 'games'
-    figure_file = 'plots/' + fname + '.png'
+    figure_file = f'plots/{fname}.png'
 
     scores = []
     for i in range(n_games):

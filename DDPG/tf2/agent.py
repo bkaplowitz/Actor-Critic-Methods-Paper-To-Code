@@ -40,16 +40,18 @@ class Agent:
         if tau is None:
             tau = self.tau
 
-        weights = []
         targets = self.target_actor.weights
-        for i, weight in enumerate(self.actor.weights):
-            weights.append(weight * tau + targets[i]*(1-tau))
+        weights = [
+            weight * tau + targets[i] * (1 - tau)
+            for i, weight in enumerate(self.actor.weights)
+        ]
         self.target_actor.set_weights(weights)
 
-        weights = []
         targets = self.target_critic.weights
-        for i, weight in enumerate(self.critic.weights):
-            weights.append(weight * tau + targets[i]*(1-tau))
+        weights = [
+            weight * tau + targets[i] * (1 - tau)
+            for i, weight in enumerate(self.critic.weights)
+        ]
         self.target_critic.set_weights(weights)
 
     def store_transition(self, state, action, reward, new_state, done):
@@ -57,19 +59,17 @@ class Agent:
 
     def save_models(self):
         print('... saving models ...')
-        self.actor.save(self.chkpt_dir+'actor')
-        self.target_actor.save(self.chkpt_dir+'target_actor')
-        self.critic.save(self.chkpt_dir+'critic')
-        self.target_critic.save(self.chkpt_dir+'target_critic')
+        self.actor.save(f'{self.chkpt_dir}actor')
+        self.target_actor.save(f'{self.chkpt_dir}target_actor')
+        self.critic.save(f'{self.chkpt_dir}critic')
+        self.target_critic.save(f'{self.chkpt_dir}target_critic')
 
     def load_models(self):
         print('... loading models ...')
-        self.actor = keras.models.load_model(self.chkpt_dir+'actor')
-        self.target_actor = \
-            keras.models.load_model(self.chkpt_dir+'target_actor')
-        self.critic = keras.models.load_model(self.chkpt_dir+'critic')
-        self.target_critic = \
-            keras.models.load_model(self.chkpt_dir+'target_critic')
+        self.actor = keras.models.load_model(f'{self.chkpt_dir}actor')
+        self.target_actor = keras.models.load_model(f'{self.chkpt_dir}target_actor')
+        self.critic = keras.models.load_model(f'{self.chkpt_dir}critic')
+        self.target_critic = keras.models.load_model(f'{self.chkpt_dir}target_critic')
 
     def choose_action(self, observation, evaluate=False):
         state = tf.convert_to_tensor([observation], dtype=tf.float32)

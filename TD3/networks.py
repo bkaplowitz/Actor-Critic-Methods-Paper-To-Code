@@ -15,7 +15,7 @@ class CriticNetwork(nn.Module):
         self.n_actions = n_actions
         self.name = name
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_td3')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_td3')
 
         # I think this breaks if the env has a 2D state representation
         self.fc1 = nn.Linear(self.input_dims[0] + n_actions, self.fc1_dims)
@@ -55,7 +55,7 @@ class ActorNetwork(nn.Module):
         self.n_actions = n_actions
         self.name = name
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_td3')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_td3')
 
         self.fc1 = nn.Linear(*self.input_dims, self.fc1_dims)
         self.fc2 = nn.Linear(self.fc1_dims, self.fc2_dims)

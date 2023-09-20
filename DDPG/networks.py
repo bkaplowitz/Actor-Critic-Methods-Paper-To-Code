@@ -15,7 +15,7 @@ class CriticNetwork(nn.Module):
         self.n_actions = n_actions
         self.name = name
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_ddpg')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_ddpg')
 
         self.fc1 = nn.Linear(*self.input_dims, self.fc1_dims)
         self.fc2 = nn.Linear(self.fc1_dims, self.fc2_dims)
@@ -26,7 +26,7 @@ class CriticNetwork(nn.Module):
         #self.bn2 = nn.BatchNorm1d(self.fc2_dims)
 
         self.action_value = nn.Linear(self.n_actions, self.fc2_dims)
-        
+
         self.q = nn.Linear(self.fc2_dims, 1)
 
         f1 = 1./np.sqrt(self.fc1.weight.data.size()[0])
@@ -76,7 +76,7 @@ class CriticNetwork(nn.Module):
 
     def save_best(self):
         print('... saving best checkpoint ...')
-        checkpoint_file = os.path.join(self.checkpoint_dir, self.name+'_best')
+        checkpoint_file = os.path.join(self.checkpoint_dir, f'{self.name}_best')
         T.save(self.state_dict(), checkpoint_file)
 
 class ActorNetwork(nn.Module):
@@ -89,7 +89,7 @@ class ActorNetwork(nn.Module):
         self.n_actions = n_actions
         self.name = name
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_ddpg')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_ddpg')
 
         self.fc1 = nn.Linear(*self.input_dims, self.fc1_dims)
         self.fc2 = nn.Linear(self.fc1_dims, self.fc2_dims)
@@ -140,5 +140,5 @@ class ActorNetwork(nn.Module):
 
     def save_best(self):
         print('... saving best checkpoint ...')
-        checkpoint_file = os.path.join(self.checkpoint_dir, self.name+'_best')
+        checkpoint_file = os.path.join(self.checkpoint_dir, f'{self.name}_best')
         T.save(self.state_dict(), checkpoint_file)
