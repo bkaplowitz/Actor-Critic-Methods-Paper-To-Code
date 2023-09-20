@@ -2,8 +2,7 @@ import numpy as np
 import gym
 
 def simple_policy(state):
-    action = 0 if state < 5 else 1
-    return action
+    return 0 if state < 5 else 1
 
 if __name__ == '__main__':
     env = gym.make('CartPole-v0')
@@ -11,11 +10,8 @@ if __name__ == '__main__':
     gamma = 0.99
 
     states = np.linspace(-0.2094, 0.2094, 10)
-    V = {}
-    for state in range(len(states)+1):
-        V[state] = 0
-
-    for i in range(5000):
+    V = {state: 0 for state in range(len(states)+1)}
+    for _ in range(5000):
         observation = env.reset()
         done = False
         while not done:
@@ -26,6 +22,6 @@ if __name__ == '__main__':
             V[state] = V[state] + alpha*(reward + gamma*V[state_] - V[state])
             observation = observation_
 
-    for state in V:
-        print(state, '%.3f' % V[state])
+    for state, value in V.items():
+        print(state, '%.3f' % value)
 

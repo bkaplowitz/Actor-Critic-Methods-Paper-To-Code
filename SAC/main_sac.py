@@ -22,9 +22,10 @@ if __name__ == '__main__':
                 env=env, batch_size=256, layer1_size=256, layer2_size=256,
                 n_actions=env.action_space.shape[0])
     n_games = 250
-    filename = env_id + '_'+ str(n_games) + 'games_scale' + str(agent.scale) + \
-                    '_clamp_on_sigma.png'
-    figure_file = 'plots/' + filename
+    filename = (
+        f'{env_id}_{n_games}games_scale{str(agent.scale)}_clamp_on_sigma.png'
+    )
+    figure_file = f'plots/{filename}'
 
     best_score = env.reward_range[0]
     score_history = []

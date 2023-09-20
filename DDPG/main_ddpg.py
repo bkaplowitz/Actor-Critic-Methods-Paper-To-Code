@@ -10,9 +10,8 @@ if __name__ == '__main__':
                     batch_size=64, fc1_dims=400, fc2_dims=300, 
                     n_actions=env.action_space.shape[0])
     n_games = 1000
-    filename = 'LunarLander_alpha_' + str(agent.alpha) + '_beta_' + \
-                str(agent.beta) + '_' + str(n_games) + '_games'
-    figure_file = 'plots/' + filename + '.png'
+    filename = f'LunarLander_alpha_{str(agent.alpha)}_beta_{str(agent.beta)}_{n_games}_games'
+    figure_file = f'plots/{filename}.png'
 
     best_score = env.reward_range[0]
     score_history = []

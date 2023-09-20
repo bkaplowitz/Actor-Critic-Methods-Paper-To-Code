@@ -3,7 +3,7 @@ import numpy as np
 class Agent():
     def __init__(self, gamma=0.99):
         self.V = {}
-        self.sum_space = [i for i in range(4, 22)]
+        self.sum_space = list(range(4, 22))
         self.dealer_show_card_space = [i+1 for i in range(10)]
         self.ace_space = [False, True]
         self.action_space = [0, 1] # stick or hit
@@ -27,17 +27,16 @@ class Agent():
 
     def policy(self, state):
         total, _, _ = state
-        action = 0 if total >= 20 else 1
-        return action
+        return 0 if total >= 20 else 1
 
 
     def update_V(self):
         for idt, (state, _) in enumerate(self.memory):
-            G = 0
             if self.states_visited[state] == 0:
                 self.states_visited[state] += 1
                 discount = 1
-                for t, (_, reward) in enumerate(self.memory[idt:]):
+                G = 0
+                for _, reward in self.memory[idt:]:
                     G += reward * discount
                     discount *= self.gamma
                     self.returns[state].append(G)

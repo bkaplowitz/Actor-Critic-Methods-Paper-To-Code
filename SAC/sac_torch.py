@@ -16,21 +16,42 @@ class Agent():
         self.batch_size = batch_size
         self.n_actions = n_actions
 
-        self.actor = ActorNetwork(alpha, input_dims, layer1_size,
-                                  layer2_size, n_actions=n_actions,
-                                  name=env_id+'_actor', 
-                                  max_action=env.action_space.high)
-        self.critic_1 = CriticNetwork(beta, input_dims, layer1_size,
-                                      layer2_size, n_actions=n_actions,
-                                      name=env_id+'_critic_1')
-        self.critic_2 = CriticNetwork(beta, input_dims, layer1_size,
-                                      layer2_size, n_actions=n_actions,
-                                      name=env_id+'_critic_2')
-       
-        self.value = ValueNetwork(beta, input_dims, layer1_size,
-                                      layer2_size, name=env_id+'_value')
-        self.target_value = ValueNetwork(beta, input_dims, layer1_size,
-                                         layer2_size, name=env_id+'_target_value')
+        self.actor = ActorNetwork(
+            alpha,
+            input_dims,
+            layer1_size,
+            layer2_size,
+            n_actions=n_actions,
+            name=f'{env_id}_actor',
+            max_action=env.action_space.high,
+        )
+        self.critic_1 = CriticNetwork(
+            beta,
+            input_dims,
+            layer1_size,
+            layer2_size,
+            n_actions=n_actions,
+            name=f'{env_id}_critic_1',
+        )
+        self.critic_2 = CriticNetwork(
+            beta,
+            input_dims,
+            layer1_size,
+            layer2_size,
+            n_actions=n_actions,
+            name=f'{env_id}_critic_2',
+        )
+
+        self.value = ValueNetwork(
+            beta, input_dims, layer1_size, layer2_size, name=f'{env_id}_value'
+        )
+        self.target_value = ValueNetwork(
+            beta,
+            input_dims,
+            layer1_size,
+            layer2_size,
+            name=f'{env_id}_target_value',
+        )
 
         self.scale = reward_scale
         self.update_network_parameters(tau=1)

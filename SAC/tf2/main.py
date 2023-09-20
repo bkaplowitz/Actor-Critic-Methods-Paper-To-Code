@@ -20,7 +20,7 @@ if __name__ == '__main__':
                                force=True)
     filename = 'inverted_pendulum.png'
 
-    figure_file = 'plots/' + filename
+    figure_file = f'plots/{filename}'
 
     best_score = env.reward_range[0]
     score_history = []

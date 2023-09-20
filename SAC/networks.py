@@ -16,7 +16,7 @@ class CriticNetwork(nn.Module):
         self.n_actions = n_actions
         self.name = name
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_sac')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_sac')
 
         # I think this breaks if the env has a 2D state representation
         self.fc1 = nn.Linear(self.input_dims[0] + n_actions, self.fc1_dims)
@@ -55,7 +55,7 @@ class ActorNetwork(nn.Module):
         self.name = name
         self.max_action = max_action
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_sac')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_sac')
         self.reparam_noise = 1e-6
 
         self.fc1 = nn.Linear(*self.input_dims, self.fc1_dims)
@@ -86,12 +86,8 @@ class ActorNetwork(nn.Module):
         mu, sigma = self.forward(state)
         probabilities = T.distributions.Normal(mu, sigma)
 
-        if reparameterize:
-            actions = probabilities.rsample() # reparameterizes the policy
-        else:
-            actions = probabilities.sample()
-
-        action = T.tanh(actions)*T.tensor(self.max_action).to(self.device) 
+        actions = probabilities.rsample() if reparameterize else probabilities.sample()
+        action = T.tanh(actions)*T.tensor(self.max_action).to(self.device)
         log_probs = probabilities.log_prob(actions)
         log_probs -= T.log(1-action.pow(2) + self.reparam_noise)
         log_probs = log_probs.sum(1, keepdim=True)
@@ -109,11 +105,7 @@ class ActorNetwork(nn.Module):
         cov = T.stack(cov)
         probabilities = T.distributions.MultivariateNormal(mu, cov)
 
-        if reparameterize:
-            actions = probabilities.rsample() # reparameterizes the policy
-        else:
-            actions = probabilities.sample()
-
+        actions = probabilities.rsample() if reparameterize else probabilities.sample()
         action = T.tanh(actions) # enforce the action bound for (-1, 1)
         log_probs = probabilities.log_prob(actions)
         log_probs -= T.sum(T.log(1-action.pow(2) + self.reparam_noise))
@@ -136,7 +128,7 @@ class ValueNetwork(nn.Module):
         self.fc2_dims = fc2_dims
         self.name = name
         self.checkpoint_dir = chkpt_dir
-        self.checkpoint_file = os.path.join(self.checkpoint_dir, name+'_sac')
+        self.checkpoint_file = os.path.join(self.checkpoint_dir, f'{name}_sac')
 
         self.fc1 = nn.Linear(*self.input_dims, self.fc1_dims)
         self.fc2 = nn.Linear(self.fc1_dims, self.fc2_dims)

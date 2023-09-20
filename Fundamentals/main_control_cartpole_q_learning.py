@@ -21,8 +21,7 @@ class CartPoleStateDigitizer():
         for i in range(len(self.position_space)+1):
             for j in range(len(self.velocity_space)+1):
                 for k in range(len(self.pole_angle_space)+1):
-                    for l in range(len(self.pole_velocity_space)+1):
-                        states.append((i,j,k,l))
+                    states.extend((i, j, k, l) for l in range(len(self.pole_velocity_space)+1))
         return states
 
     def digitize(self, observation):

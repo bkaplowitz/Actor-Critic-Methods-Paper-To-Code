@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     fname = 'REINFORCE_' + 'lunar_lunar_lr' + str(agent.lr) + '_' \
             + str(n_games) + 'games'
-    figure_file = 'plots/' + fname + '.png'
+    figure_file = f'plots/{fname}.png'
 
     scores = []
     for i in range(n_games):

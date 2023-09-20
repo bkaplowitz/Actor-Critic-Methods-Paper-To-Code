@@ -23,11 +23,11 @@ class Agent:
 
     def save_models(self):
         print('... saving models ...')
-        self.policy.save(self.chkpt_dir+'reinforce')
+        self.policy.save(f'{self.chkpt_dir}reinforce')
 
     def load_models(self):
         print('... loading models ...')
-        self.policy = keras.models.load_model(self.chkpt_dir+'reinforce')
+        self.policy = keras.models.load_model(f'{self.chkpt_dir}reinforce')
 
     def choose_action(self, observation):
         state = tf.convert_to_tensor([observation], dtype=tf.float32)

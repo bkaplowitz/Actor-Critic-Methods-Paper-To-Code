@@ -3,7 +3,7 @@ import numpy as np
 class Agent():
     def __init__(self, eps=0.1, gamma=0.99):
         self.Q = {}
-        self.sum_space = [i for i in range(4, 22)]
+        self.sum_space = list(range(4, 22))
         self.dealer_show_card_space = [i+1 for i in range(10)]
         self.ace_space = [False, True]
         self.action_space = [0, 1] #stick or hit
@@ -31,23 +31,20 @@ class Agent():
                         self.pairs_visited[(state, action)] = 0
 
     def init_policy(self):
-        policy = {}
         n = len(self.action_space)
-        for state in self.state_space:
-            policy[state] = [1/n for _ in range(n)]
+        policy = {state: [1/n for _ in range(n)] for state in self.state_space}
         self.policy = policy
 
     def choose_action(self, state):
-        action = np.random.choice(self.action_space, p=self.policy[state])
-        return action
+        return np.random.choice(self.action_space, p=self.policy[state])
 
     def update_Q(self):
         for idt, (state, action, _) in enumerate(self.memory):
-            G = 0
-            discount = 1
             if self.pairs_visited[(state, action)] == 0:
                 self.pairs_visited[(state, action)] += 1
-                for t, (_, _, reward) in enumerate(self.memory[idt:]):
+                G = 0
+                discount = 1
+                for _, _, reward in self.memory[idt:]:
                     G += reward * discount
                     discount *= self.gamma
                     self.returns[(state, action)].append(G)

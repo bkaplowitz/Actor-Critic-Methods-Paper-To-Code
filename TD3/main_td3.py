@@ -11,8 +11,8 @@ if __name__ == '__main__':
                 env=env, batch_size=100, layer1_size=400, layer2_size=300,
                 n_actions=env.action_space.shape[0])
     n_games = 1500
-    filename = 'Walker2d_' + str(n_games) + '_2.png'
-    figure_file = 'plots/' + filename
+    filename = f'Walker2d_{n_games}_2.png'
+    figure_file = f'plots/{filename}'
 
     best_score = env.reward_range[0]
     score_history = []

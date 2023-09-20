@@ -50,23 +50,21 @@ class Agent:
     def save_models(self):
         if self.memory.mem_cntr > self.batch_size:
             print('... saving models ...')
-            self.actor.save(self.fname+'actor')
-            self.critic_1.save(self.fname+'critic_1')
-            self.critic_2.save(self.fname+'critic_2')
-            self.target_actor.save(self.fname+'target_actor')
-            self.target_critic_1.save(self.fname+'target_critic_1')
-            self.target_critic_2.save(self.fname+'target_critic_2')
+            self.actor.save(f'{self.fname}actor')
+            self.critic_1.save(f'{self.fname}critic_1')
+            self.critic_2.save(f'{self.fname}critic_2')
+            self.target_actor.save(f'{self.fname}target_actor')
+            self.target_critic_1.save(f'{self.fname}target_critic_1')
+            self.target_critic_2.save(f'{self.fname}target_critic_2')
 
     def load_models(self):
         print('... loading models ...')
-        self.actor = keras.models.load_model(self.fname+'actor')
-        self.critic_1 = keras.models.load_model(self.fname+'critic_1')
-        self.critic_2 = keras.models.load_model(self.fname+'critic_2')
-        self.target_actor = keras.models.load_model(self.fname+'target_actor')
-        self.target_critic_1 = \
-            keras.models.load_model(self.fname+'target_critic_1')
-        self.target_critic_2 = \
-            keras.models.load_model(self.fname+'target_critic_2')
+        self.actor = keras.models.load_model(f'{self.fname}actor')
+        self.critic_1 = keras.models.load_model(f'{self.fname}critic_1')
+        self.critic_2 = keras.models.load_model(f'{self.fname}critic_2')
+        self.target_actor = keras.models.load_model(f'{self.fname}target_actor')
+        self.target_critic_1 = keras.models.load_model(f'{self.fname}target_critic_1')
+        self.target_critic_2 = keras.models.load_model(f'{self.fname}target_critic_2')
 
     def choose_action(self, observation):
         if self.time_step < self.warmup:
@@ -148,23 +146,23 @@ class Agent:
         if tau is None:
             tau = self.tau
 
-        weights = []
         targets = self.target_actor.weights
-        for i, weight in enumerate(self.actor.weights):
-            weights.append(weight * tau + targets[i]*(1-tau))
-
+        weights = [
+            weight * tau + targets[i] * (1 - tau)
+            for i, weight in enumerate(self.actor.weights)
+        ]
         self.target_actor.set_weights(weights)
 
-        weights = []
         targets = self.target_critic_1.weights
-        for i, weight in enumerate(self.critic_1.weights):
-            weights.append(weight * tau + targets[i]*(1-tau))
-
+        weights = [
+            weight * tau + targets[i] * (1 - tau)
+            for i, weight in enumerate(self.critic_1.weights)
+        ]
         self.target_critic_1.set_weights(weights)
 
-        weights = []
         targets = self.target_critic_2.weights
-        for i, weight in enumerate(self.critic_2.weights):
-            weights.append(weight * tau + targets[i]*(1-tau))
-
+        weights = [
+            weight * tau + targets[i] * (1 - tau)
+            for i, weight in enumerate(self.critic_2.weights)
+        ]
         self.target_critic_2.set_weights(weights)
